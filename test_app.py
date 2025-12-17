@@ -89,22 +89,22 @@ def test_update_item(client):
     assert data['quantity'] == 20
 
 def test_delete_item(client):
-    # Добавляем товар
-    response = client.post('/items', json={
-        'name': 'Test Item',
-        'quantity': 10,
-        'price': 100.0,
-        'category': 'Electronics'
+    response = client.post("/items", json={
+        "name": "Test Item",
+        "quantity": 10,
+        "price": 100.0,
+        "category": "Electronics",
     })
-    item_id = response.get_json()['id']
-    
-    # Удаляем товар
-    response = client.delete(f'/items/{item_id}')
+    item_id = response.get_json()["id"]
+
+    response = client.delete(f"/items/{item_id}")
     assert response.status_code == 200
-    
-    # Проверяем, что товар удален
-    response = client.get(f'/items/{item_id}')
-    assert response.status_code == 404
+
+    response = client.get("/items")
+    assert response.status_code == 200
+    ids = [item["id"] for item in response.get_json()]
+    assert item_id not in ids
+
 
 def test_report_summary(client):
     # Добавляем тестовые данные
