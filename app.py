@@ -27,7 +27,7 @@ def create_app(test_config=None):
     @app.route("/items", methods=["POST"])
     def add_item():
         data = request.get_json()
-        if not 
+        if not data:
             return jsonify({"error": "No data provided"}), 400
 
         name = data.get("name")
