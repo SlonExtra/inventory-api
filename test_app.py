@@ -1,6 +1,6 @@
 import pytest
-from app import app
-from models import db, Item
+from app import create_app
+from models import db
 
 @pytest.fixture
 def app():
@@ -20,25 +20,24 @@ def client(app):
     return app.test_client()
 
 def test_add_item(client):
-    # Успешное добавление
-    response = client.post('/items', json={ы
-        'name': 'Test Item',
-        'quantity': 10,
-        'price': 100.0,
-        'category': 'Electronics'
+    response = client.post("/items", json={
+        "name": "Test Item",
+        "quantity": 10,
+        "price": 100.0,
+        "category": "Electronics",
     })
     assert response.status_code == 201
     data = response.get_json()
-    assert data['name'] == 'Test Item'
-    
-    # Ошибка: отрицательное количество
-    response = client.post('/items', json={
-        'name': 'Test Item',
-        'quantity': -5,
-        'price': 100.0,
-        'category': 'Electronics'
+    assert data["name"] == "Test Item"
+
+    response = client.post("/items", json={
+        "name": "Test Item",
+        "quantity": -5,
+        "price": 100.0,
+        "category": "Electronics",
     })
     assert response.status_code == 400
+
 
 def test_get_items(client):
     # Добавляем тестовые данные
