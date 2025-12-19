@@ -95,15 +95,12 @@ def create_app(test_config=None):
             categories.setdefault(item.category, {"count": 0, "total_value": 0})
             categories[item.category]["count"] += 1
             categories[item.category]["total_value"] += item.quantity * item.price
-
         low_stock_items = [item.to_dict() for item in items if item.quantity <= 0]
-
         report = {
             "total_inventory_value": total_value,
             "categories": categories,
             "low_stock_items": low_stock_items,
         }
-
         if request.args.get("format", "json") == "csv":
             output = io.StringIO()
             writer = csv.writer(output)
@@ -138,4 +135,4 @@ if __name__ == "__main__":
         db.create_all()
 
     # чтобы Bandit не ругался на debug=True, не хардкодим:
-    app.run(debug=os.getenv("FLASK_DEBUG") == "1")
+    app.run(port=5001, debug=os.getenv("FLASK_DEBUG") == "1")
